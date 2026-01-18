@@ -7,7 +7,8 @@ import express from 'express';
 //Define Environment variables: import the app's CLIENT_ID from .env file:
 const CLIENT_ID = process.env.OAUTH2CLIENT_ID;
 const CLIENT_SECRET = process.env.OAUTH2CLIENT_SECRET;
-
+var refresh_token
+var access_token
 
 const PORT = process.env.PORT || 8080;
 
@@ -21,6 +22,7 @@ const code_challenge = crypto.createHash('sha256').update(codeVerifier).digest()
 const baseURL = "https://api.x.com/2/";
 const authEndpoint = "oauth2/authorize";
 const accessToken = "oauth2/token";
+const tweetURL = "tweets";
 
 const authQueryPara = new URLSearchParams({
 	response_type: "code",
@@ -34,7 +36,7 @@ const authQueryPara = new URLSearchParams({
 	code_challenge_method: "S256"
 })
 const authURL = "https://x.com/i/" + authEndpoint + "?" + authQueryPara.toString();
-// console.log(`Open this URL in your browser and authorise:\n${authURL}`)
+console.log(`Open this URL in your browser and authorise:\n${authURL}`)
 
 
 const app = express();
@@ -47,9 +49,9 @@ const basicAuth = ()=>{
 	return base64String;
 }
 
-async function postAccessToken(url, code){
+async function postAccessToken(code){
 	try{
-		const response = await fetch(url, {
+		const response = await fetch(baseURL + accessToken, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/x-www-form-urlencoded",
@@ -67,12 +69,16 @@ async function postAccessToken(url, code){
 		}
 		const data = await response.json();
 		console.log(data);
+		refresh_token = data.refresh_token;
+		access_token = data.access_token;
+		console.log(access_token);
+		postTweet("Hi, I am Vivek!!", access_token);
 	} catch(error){
 		console.error("Fetch operation falied: ", error);
 	  }
 }
 
-
+//TODO: Save the refresh token in a database generated from above.
 
 app.get("/", (req, res) =>{
 	res.send(`Server is running on http://localhost:${PORT}`);
@@ -84,9 +90,45 @@ app.get("/callback", (req, res) =>{
 	const redirectState = req.query.state;
 	if(redirectState == authQueryPara.get('state')) {
 		//some funtion
-		postAccessToken(baseURL + accessToken, redirectAuthCode)
+		postAccessToken(redirectAuthCode)
 	}
 })
+
+//Post a tweet:
+
+async function postTweet(tweetText, accToken){
+	const tweet_options ={
+		method: 'POST',
+		headers: {
+			"Content-Type": "application/json",
+			"Authorization": `Bearer ${accToken}`
+		},
+		body: JSON.stringify({
+				text: tweetText
+			})
+	}
+	let response;
+	try{
+		response = await fetch(baseURL + tweetURL, tweet_options);
+		if(!response.ok){
+			throw new Error(`HTTP error! Status: ${response.status}`);
+		}
+		const data = await response.json();
+		console.log(data);
+	} catch(error){
+		console.error("Posting tweet falied: ", error);
+		if (response){
+			try {
+				const errorText = await response.text();  // Now accessible here
+				console.error('Error response body:', errorText);
+			  } catch (textError) {
+				console.error('Failed to read error text:', textError);
+			  }
+			} else {
+			  console.error('No response available (e.g., network error)');
+			}
+	}
+}
 
 
 
