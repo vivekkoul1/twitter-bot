@@ -9,6 +9,7 @@ const CLIENT_ID = process.env.OAUTH2CLIENT_ID;
 const CLIENT_SECRET = process.env.OAUTH2CLIENT_SECRET;
 var refresh_token
 var access_token
+var expire =  expire
 
 const PORT = process.env.PORT || 8080;
 
@@ -23,14 +24,14 @@ const baseURL = "https://api.x.com/2/";
 const authEndpoint = "oauth2/authorize";
 const accessToken = "oauth2/token";
 const tweetURL = "tweets";
+const tweet = "Hello all!!"
 
 const authQueryPara = new URLSearchParams({
 	response_type: "code",
 	client_id: CLIENT_ID,
-	//redirect_uri: "https://vivekkoul1.github.io/CS50-final-project-dog-breed-selector/index.html",
 	redirect_uri: `http://localhost:${PORT}/callback`,
-	
-	scope: "tweet.read tweet.write offline.access",
+	scope: "tweet.write tweet.read users.read offline.access",
+	// scope: "tweet.write offline.access",
 	state: crypto.randomBytes(16).toString('hex'),
 	code_challenge: code_challenge,
 	code_challenge_method: "S256"
@@ -42,7 +43,7 @@ console.log(`Open this URL in your browser and authorise:\n${authURL}`)
 const app = express();
 
 
-const basicAuth = ()=>{
+function basicAuth(){
 	const credentials = CLIENT_ID + ":" + CLIENT_SECRET;
 	const buffer = Buffer.from(credentials, 'utf-8');
 	const base64String = buffer.toString('base64');
@@ -54,13 +55,13 @@ async function postAccessToken(code){
 		const response = await fetch(baseURL + accessToken, {
 			method: "POST",
 			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-				"Authorization": `Basic ${basicAuth()}`
+				'Content-Type': "application/x-www-form-urlencoded",
+				Authorization: `Basic ${basicAuth()}`
 			},
 			body: new URLSearchParams({
 				code: code,
 				grant_type: 'authorization_code',
-				redirect_uri: "http://localhost:8000/callback",
+				redirect_uri: `http://localhost:${PORT}/callback`,
 				code_verifier: codeVerifier
 			})
 		});
@@ -71,11 +72,13 @@ async function postAccessToken(code){
 		console.log(data);
 		refresh_token = data.refresh_token;
 		access_token = data.access_token;
-		console.log(access_token);
-		postTweet("Hi, I am Vivek!!", access_token);
+		expire = data.expires_in;
+		// console.log(access_token);
+		postTweet(tweet,access_token);
 	} catch(error){
 		console.error("Fetch operation falied: ", error);
 	  }
+	  
 }
 
 //TODO: Save the refresh token in a database generated from above.
@@ -96,12 +99,13 @@ app.get("/callback", (req, res) =>{
 
 //Post a tweet:
 
-async function postTweet(tweetText, accToken){
+async function postTweet(tweetText,accToken){
+	console.log(accToken);
 	const tweet_options ={
 		method: 'POST',
 		headers: {
-			"Content-Type": "application/json",
-			"Authorization": `Bearer ${accToken}`
+			'Content-Type': "application/json",
+			Authorization: `Bearer ${accToken}`
 		},
 		body: JSON.stringify({
 				text: tweetText
@@ -139,7 +143,6 @@ app.listen(PORT, ()=> {
 
 
 
-////Step-2 of OAuth2.0 with PKCE workflow: Create an authorization URL
 
 
 
@@ -148,27 +151,3 @@ app.listen(PORT, ()=> {
 
 
 
-//Connect to an AI 
-
-// import OpenAI from "openai";
-// const OpenAI = require( "openai");
-// const anyscale = new OpenAI({
-  // baseURL: "https://api.endpoints.anyscale.com/v1",
-  // apiKey: process.env.ANYSCALE_API_KEY,
-// });
-
-// async function chat_complete(prompt) {
-  // const completion = await anyscale.chat.completions.create({
-    // model: "meta-llama/Meta-Llama-3-8B-Instruct",
-    // messages: [
-      // { role: "system", content: "You are a helpful assistant." },
-      // { role: "user", content: prompt },
-    // ],
-    // temperature: 0.7,
-    // max_tokens: 50
-  // });
-  // console.log(completion.choices);
-// }
-
-// const query = "why sky is blue";
-// chat_complete(query);00
