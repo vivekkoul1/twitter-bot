@@ -21,10 +21,10 @@ const code_challenge = crypto.createHash('sha256').update(codeVerifier).digest()
 					   .replace(/=+$/, '');
 
 const baseURL = "https://api.x.com/2/";
-const authEndpoint = "oauth2/authorize";
-const accessToken = "oauth2/token";
+const authEndpointURL = "oauth2/authorize";
+const accessTokenURL = "oauth2/token";
 const tweetURL = "tweets";
-const tweet = "Hello all!!"
+const tweet = `Hello at ${new Date().toLocaleTimeString()}!!`
 
 const authQueryPara = new URLSearchParams({
 	response_type: "code",
@@ -36,7 +36,7 @@ const authQueryPara = new URLSearchParams({
 	code_challenge: code_challenge,
 	code_challenge_method: "S256"
 })
-const authURL = "https://x.com/i/" + authEndpoint + "?" + authQueryPara.toString();
+const authURL = "https://x.com/i/" + authEndpointURL + "?" + authQueryPara.toString();
 console.log(`Open this URL in your browser and authorise:\n${authURL}`)
 
 
@@ -52,7 +52,7 @@ function basicAuth(){
 
 async function postAccessToken(code){
 	try{
-		const response = await fetch(baseURL + accessToken, {
+		const response = await fetch(baseURL + accessTokenURL, {
 			method: "POST",
 			headers: {
 				'Content-Type': "application/x-www-form-urlencoded",
@@ -74,7 +74,7 @@ async function postAccessToken(code){
 		access_token = data.access_token;
 		expire = data.expires_in;
 		// console.log(access_token);
-		postTweet(tweet,access_token);
+		//postTweet(tweet,access_token);
 	} catch(error){
 		console.error("Fetch operation falied: ", error);
 	  }
@@ -96,44 +96,6 @@ app.get("/callback", (req, res) =>{
 		postAccessToken(redirectAuthCode)
 	}
 })
-
-//Post a tweet:
-
-async function postTweet(tweetText,accToken){
-	console.log(accToken);
-	const tweet_options ={
-		method: 'POST',
-		headers: {
-			'Content-Type': "application/json",
-			Authorization: `Bearer ${accToken}`
-		},
-		body: JSON.stringify({
-				text: tweetText
-			})
-	}
-	let response;
-	try{
-		response = await fetch(baseURL + tweetURL, tweet_options);
-		if(!response.ok){
-			throw new Error(`HTTP error! Status: ${response.status}`);
-		}
-		const data = await response.json();
-		console.log(data);
-	} catch(error){
-		console.error("Posting tweet falied: ", error);
-		if (response){
-			try {
-				const errorText = await response.text();  // Now accessible here
-				console.error('Error response body:', errorText);
-			  } catch (textError) {
-				console.error('Failed to read error text:', textError);
-			  }
-			} else {
-			  console.error('No response available (e.g., network error)');
-			}
-	}
-}
-
 
 
 app.listen(PORT, ()=> {
