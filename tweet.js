@@ -23,7 +23,7 @@ const tweetURL = "tweets";
 //read prompt file for AI.
 let file;
 try{
-	file = fs.readFileSync("./prompt.txt");
+	file = fs.readFileSync("./prompt.txt").toString();
 } catch (err) {
 	console.error(err);
 }
@@ -179,13 +179,7 @@ postTweet();
 
 setInterval(() => {
 	postTweet().catch(console.error);
-}, 180000);
-
-// setInterval(() => {
-  // getValidAccessToken().catch(console.error);
-// }, 10000);
-
-// ai("high-net-worth individuals", "equity mutual funds", "cash-flow mindset")
+}, 1200000);
 
 
 //function to pick random topic for AI
@@ -210,11 +204,14 @@ async function ai(audience, topic, angle){
 		//model: 'meta-llama/llama-guard-4-12b',
 		model: "openai/gpt-oss-120b",
 		// model: 'llama-3.3-70b-versatile',
-		temperature: 2,
+		temperature: 1.2,
 		top_p: 0.9,
 		instructions: "You are a personal finance advisor writing for an Indian audience on Twitter (X).",
-		input: `${file}`,
+		input: `${file}
+			TARGET AUDIENCE: ${audience}
+			PRIMARY TOPIC: ${topic}
+			ANGLE: ${angle}
+			`,
 	});
-	console.log(response.output_text);
 	return response.output_text;
 }

@@ -6,14 +6,6 @@ This tweet is part of a long-running series. You must rotate all three:
 2) The target audience
 3)Angle or perspective
 
-TARGET AUDIENCE:
-${audience}
-
-PRIMARY TOPIC:
-${topic}
-
-ANGLE:
-${angle}
 
 TASK:
 Generate ONE practical, insightful tweet tailored to the chosen audience, topic abd angle focused on Indian financial realities.
