@@ -29,7 +29,7 @@ const tweet = `Hello at ${new Date().toLocaleTimeString()}!!`
 const authQueryPara = new URLSearchParams({
 	response_type: "code",
 	client_id: CLIENT_ID,
-	redirect_uri: `http://localhost:${PORT}/callback`,
+	redirect_uri: `twitter-refresh-token-generate.up.railway.app/callback`,
 	scope: "tweet.write tweet.read users.read offline.access",
 	// scope: "tweet.write offline.access",
 	state: crypto.randomBytes(16).toString('hex'),
@@ -61,7 +61,7 @@ async function postAccessToken(code){
 			body: new URLSearchParams({
 				code: code,
 				grant_type: 'authorization_code',
-				redirect_uri: `http://localhost:${PORT}/callback`,
+				redirect_uri: `twitter-refresh-token-generate.up.railway.app/callback`,
 				code_verifier: codeVerifier
 			})
 		});
@@ -84,7 +84,7 @@ async function postAccessToken(code){
 //TODO: Save the refresh token in a database generated from above.
 
 app.get("/", (req, res) =>{
-	res.send(`Server is running on http://localhost:${PORT}`);
+	res.send(`Server is running on twitter-refresh-token-generate.up.railway.app`);
 })
 
 app.get("/callback", (req, res) =>{
