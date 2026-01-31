@@ -84,7 +84,7 @@ async function postAccessToken(code){
 //TODO: Save the refresh token in a database generated from above.
 
 app.get("/", (req, res) =>{
-	res.send(`Server is running on https://twitter-refresh-token-generate.up.railway.app/`);
+	res.send(`Server is running on \nhttps://twitter-refresh-token-generate.up.railway.app/`);
 })
 
 app.get("/callback", (req, res) =>{
