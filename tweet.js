@@ -145,7 +145,8 @@ async function postTweet(){
 			Authorization: `Bearer ${token}`
 		},
 		body: JSON.stringify({
-				text: tweet
+				text: tweet,
+				community_id: '1471840562399485958',
 			})
 	}
 	let response;
@@ -179,7 +180,7 @@ postTweet();
 
 setInterval(() => {
 	postTweet().catch(console.error);
-}, 1200000);
+}, 1179000);
 
 
 //function to pick random topic for AI
