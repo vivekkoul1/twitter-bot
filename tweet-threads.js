@@ -8,25 +8,29 @@ import * as fs from 'fs';
 let lastTweetId = null;
 let count = 0;
 const posts = [
-  "1/ 🚨 CRASH ALERT: Gold & Silver ETFs are seeing a historic bloodbath! 📉\n\nIn just 72 hours, we've seen record highs turn into a $7 TRILLION wipeout globally. MCX Gold tanked ₹20,000+ and Silver plunged nearly 30% from the peak! 😱\n\nWhat’s actually happening? Let’s dive into the 10 reasons why. 👇🧵\n\n#GoldPrice #SilverCrash",
+  "1/12 🚨 THE DAD OF ALL DEALS! 🇮🇳🤝🇺🇸\n\nHistory was made today as President Trump & PM Modi finalized the India-US Trade Deal. \n\nUS Tariffs on Indian goods are slashed from 50% to 18% effective IMMEDIATELY.\n\nLets see which sectors will get ppositively impacted👇! 🚀🔥\n\n#Nifty #indiaustradedeal",
 
-  "2/ 🦅 THE WARSH EFFECT\n\nThe biggest trigger? Trump’s nomination of Kevin Warsh as the next Fed Chair. 🏦\n\nWarsh is a known \"inflation hawk.\" Markets now bet on higher interest rates for longer & a shrinking Fed balance sheet. Higher rates = Death for non-yielding Gold. 💀\n\n#FederalReserve #KevinWarsh",
+  "2/12 🧵 TEXTILES: The Unstoppable Rally 👕\n\nThis is a vertical breakout for Indian apparel. With 18% tariffs, India now beats Vietnam & Bangladesh (20%). US retailers are already shifting orders to Bharat.\n\n🚀 Top Gainers:\n• Gokaldas Exports (+20% Upper Circuit)\n• Welspun Living (+19.8%)\n• KPR Mill (+20%)\n\n#Nifty #indiaustradedeal",
 
-  "3/ 💵 THE KING IS BACK\n\nThe US Dollar Index ($DXY) is surging! 🚀\n\nSince Gold is priced in Dollars globally, a stronger greenback makes the yellow metal more expensive for everyone else. Demand cools, prices drop. It’s the classic inverse relationship at play. 📉",
+  "3/12 🌊 SEAFOOD: Shrimp Exporters Rejoice 🍤\n\nIndia is the US's #1 shrimp supplier. The deal removes punitive duties, allowing for massive margin expansion. Andhra’s aqua-hubs are buzzing!\n\n🌊 Top Gainers:\n• Apex Frozen Foods (+20% Upper Circuit)\n• Avanti Feeds (+20%)\n• Coastal Corp (+10%)\n\n#Nifty #indiaustradedeal",
 
-  "4/ 🛑 THE MARGIN SQUEEZE\n\nCME Group just hiked margin requirements for Gold and Silver futures! 💸\n\nTraders now need more cash upfront to hold their positions. This forced \"over-leveraged\" players to dump their holdings instantly, creating a massive domino effect of selling. 🌊",
+  "4/12 💎 GEMS & JEWELLERY: Sparkling Back to Life ✨\n\nUS buyers were waiting for this tariff drop. Lower landed costs mean Indian diamonds and gold jewellery are now the top choice for US wholesalers.\n\n💎 Top Gainers:\n• Goldiam International (+20%)\n• Senco Gold (+15%)\n• Titan Company (+6%)\n\n#Nifty #indiaustradedeal",
 
-  "5/ 🇮🇳 THE INDIA BUDGET TWIST\n\nBudget 2026 was a mixed bag! 👜\n\nFM @nsitharaman cut import duty to 5%, which sounds good, but it actually lowered the domestic base price immediately. Combine that with global weakness, and the local crash was amplified! 🇮🇳💥\n\n#Budget2026 #NirmalaSitharaman",
+  "5/12 💊 PHARMA: The US Revenue Boost 🧪\n\nUS generic markets provide 40% of revenue for Indian Pharma. A 7% drop in costs is a direct hit to the bottom line (EPS) for global generic giants.\n\n🔬 Top Gainers:\n• Sun Pharma (+4%)\n• Dr. Reddy's (+3.5%)\n• Aurobindo Pharma (+6%)\n\n#Nifty #indiaustradedeal",
 
-  "6/ 📜 THE SGB TAX BLOW\n\nBig change for Sovereign Gold Bonds! 📉\n\nCapital gains tax exemption at maturity is now ONLY for original subscribers. If you bought SGBs from the secondary market (Stock Exchange), you're now liable for 12.5% LTCG. The \"tax-free\" hype for traders is OVER. 🚫",
+  "6/12 ⚙️ AUTO ANCILLARIES: Engineering Excellence 🏎️\n\nIndian auto parts are now cheaper for US OEMs than Chinese or Mexican alternatives. India is the official 'China+1' engineering hub.\n\n⚡ Stocks to Watch:\n• Bharat Forge (+5%)\n• Sona BLW (+7%)\n• Samvardhana Motherson (+6%)\n\n#Nifty #indiaustradedeal",
 
-  "7/ 📉 AGGRESSIVE PROFIT BOOKING\n\nLet's be real: Gold was up 30% and Silver up 70% in Jan alone! 🔥\n\nIt was \"overbought\" on every technical chart (RSI was 90+!). Institutional investors were looking for any excuse to click 'Sell' and lock in those massive gains. 💰✅",
+  "7/12 🔌 EMS & ELECTRONICS: The iCET Vision 📱\n\nThe deal aligns with iCET for high-tech manufacturing. Tariffs on electronic components are dropping to help India scale up.\n\n⚡ Top Gainers:\n• Avalon Technologies (+20%)\n• Dixon Technologies (+8%)\n• Kaynes Tech (+10%)\n\n#Nifty #indiaustradedeal",
 
-  "8/ ⚡ WHY SILVER GOT RECKED HARDER\n\nSilver isn't just jewelry; it's industrial (EVs, Solar, AI). 🔌\n\nWith a hawkish Fed, markets fear an economic slowdown. If factories slow down, silver demand drops. Being a smaller, less liquid market, it fell 3x faster than Gold! 🎢",
+  "8/12 ☀️ RENEWABLES: Solar Export Surge 🔋\n\nUS tariff relief on solar modules and cells makes Indian manufacturers like Waaree global price leaders. Export order books are about to swell.\n\n⚡ Top Gainers:\n• Waaree Energies (+12.6%)\n• Tata Power (+5%)\n• Adani Green (+11%)\n\n#Nifty #indiaustradedeal",
 
-  "9/ 🕊️ GEOPOLITICAL COOLING?\n\nPart of the record rally was a \"fear premium\" over Iran-US tensions. 🇮🇷🇺🇸\n\nRecent signals of potential dialogue have eased some immediate war fears. When the world feels 1% safer, the 'safe-haven' bid for gold starts to evaporate. 🌍✨",
+  "9/12 🛢️ THE ENERGY PIVOT: Bye Bye Russia 🇷🇺➡️🇺🇸\n\nA major condition: India stops/reduces Russian oil imports. In return, India will buy $500B of US Energy, Coal, and LNG over 5 years!\n\n🔥 Stocks to Watch:\n• Reliance Industries (+7%)\n• Adani Enterprises (+11%)\n• GAIL (US LNG Play)\n\n#Nifty #indiaustradedeal",
 
-  "10/ 🐂 IS THE BULL RUN DEAD?\n\nProbably not! 📉➡️🚀\n\nAnalysts call this a \"healthy reset.\" Central banks are still buying, and industrial silver demand is still in deficit. \n\nStrategy: Don't catch a falling knife, but watch the support levels! 🛡️\n\nAre you Buying the Dip or Waiting? 👇"
+  "10/12 🏢 REAL ESTATE & REITs: Data Center Dominance 🏙️\n\nUS tech giants like Google & Microsoft get incentives to build Data Centers in India. This unlocks massive land value for CPSEs and REITs.\n\n🏗️ Stocks to Watch:\n• Embassy Office Parks REIT\n• Anant Raj\n• DLF\n\n#Nifty #indiaustradedeal",
+
+  "11/12 📈 BROKING & EXCHANGES: Volume Winter is Over ❄️🚫\n\nAfter a Budget-led dip, the trade deal has brought FIIs back. Record trading volumes today mean brokerage stocks are flying again.\n\n📊 Top Gainers:\n• BSE Ltd (+12%)\n• Angel One (+9.5%)\n• MCX (+8%)\n\n#Nifty #indiaustradedeal",
+
+  "12/12 🏁 THE VERDICT: A New Economic Era 🇮🇳\n\nRupee is at 90.26, FIIs are net buyers, and India’s GDP growth is being revised UP by global banks. The 'Export Boom' has just begun.\n\nBuying the dip was the right move. Are you holding or folding? 👇✨\n\n#Nifty #indiaustradedeal"
 ];
 
 
@@ -179,7 +183,7 @@ async function postTweet(){
 async function postThread() {
   for (let i = 0; i < posts.length; i++) {
     await postTweet();
-    await new Promise(resolve => setTimeout(resolve, 300000)); // 5 min gap
+    await new Promise(resolve => setTimeout(resolve, 420000)); // 7 min gap
   }
 }
 
